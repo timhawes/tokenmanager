@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+<section>
+  <div class="container">
+    <h1>Access Tokens</h1>
+    {% if tokens %}
+    <p>You have the following access tokens assigned to your account:</p>
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>UID</th>
+          <th>Description</th>
+          <th>Last Used</th>
+          <th>Enabled</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for token in tokens %}
+          <tr>
+            <td><a href="{% url 'nfctokens_mytokens_edit' token.uid %}">{{ token.uid }}</a></td>
+            <td>
+              {% if token.description %}
+              {{ token.description }}
+              {% else %}
+              (no description)
+              {% endif %}
+            </td>
+            <td><span data-bs-toggle="tooltip" title="{{ token.last_seen }}">{{ token.last_seen|naturaltime }}</span></td>
+            {% if token.enabled %}
+            <td>
+              <form method="POST" action="{% url 'nfctokens_mytokens_disable' token.uid %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-text py-0"><i class="bi-toggle-on"></i></button>
+              </form>
+            </td>
+            {% else %}
+            <td>
+              <form method="POST" action="{% url 'nfctokens_mytokens_enable' token.uid %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-text py-0"><i class="bi-toggle-off" style="color:grey"></i></button>
+              </form>
+            </td>
+            {% endif %}
+            <td>
+              <a data-bs-toggle="modal" data-bs-target="#modal-delete-{{ token.uid }}" href="#">
+                <i class="bi-trash" style="color:black"></i>
+              </a>
+              <div class="modal" id="modal-delete-{{ token.uid }}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <p>Delete token {{ token.uid }}?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <form method="POST" action="{% url 'nfctokens_mytokens_delete' token.uid %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>You have no access tokens assigned to your account.</p>
+    {% endif %}
+  </div>
+  <div class="container">
+    <a href="{% url 'nfctokens_mytokens_claim' %}"><button class="btn btn-secondary">Add Token</button></a>
+    <a href="{% url 'nfctokens_mytokenlogs' %}"><button class="btn btn-secondary">View Logs</button></a>
+  </div>
+</section>
+
+{% endblock %}

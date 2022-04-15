@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load account %}
+
+{% block content %}
+
+<div class="container">
+  {% url "account_settings" as settings_url %}
+  <h1>Hi {% user_display user %}!</h1>
+  <p>
+    <nav>
+      <ul>
+        <li><a href="{% url 'account_change_password' %}">change your password</a></li>
+        <li><a href="{% url 'account_email' %}">change your email address</a></li>
+        <li><a href="{% url 'nfctokens_mytokens' %}">configure your access tokens</a></li>
+      </ul>
+    </nav>
+  </p>
+</div>
+
+{% endblock %}
