@@ -10,5 +10,6 @@ urlpatterns = [
     path("", RedirectView.as_view(url="nfctokens/", permanent=False), name="home"),
     path("accounts/", include("allauth.urls")),
     path("admin/", admin.site.urls),
+    path("groups/", include("groupadmin.urls")),
     path("nfctokens/", include("nfctokens.urls")),
 ]
