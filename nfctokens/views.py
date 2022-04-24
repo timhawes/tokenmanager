@@ -4,12 +4,12 @@
 
 import json
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import (
     login_required,
     permission_required,
-    user_passes_test,
 )
 from django.forms import ModelForm
 from django.forms.widgets import TextInput
@@ -20,10 +20,6 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST
 
 from .models import NFCToken, NFCTokenLog
-
-
-def can_configure_tokens(user):
-    return True
 
 
 class TokenAddForm(ModelForm):
@@ -47,7 +43,6 @@ class TokenEditForm(ModelForm):
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
 def mytokens(request):
     context = {
         "tokens": request.user.nfctokens.all(),
@@ -56,8 +51,12 @@ def mytokens(request):
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 def mytokens_add(request, uid=None):
+    current_count = request.user.nfctokens.count()
+    if current_count >= settings.NFCTOKENS_USER_TOTAL_LIMIT:
+        messages.add_message(request, messages.ERROR, "Too many tokens.")
+        return HttpResponseRedirect(reverse("nfctokens_mytokens"))
     if request.method == "POST":
         try:
             token = NFCToken.unassigned_objects.get(uid=uid)
@@ -66,6 +65,7 @@ def mytokens_add(request, uid=None):
         except NFCToken.DoesNotExist:
             token = NFCToken(user=request.user)
         token.enabled = True
+        token.last_edit = timezone.now()
         form = TokenAddForm(request.POST, instance=token)
         if form.is_valid():
             form.save()
@@ -85,12 +85,13 @@ def mytokens_add(request, uid=None):
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 def mytokens_edit(request, uid):
     token = request.user.nfctokens.get(uid=uid)
     if request.method == "POST":
         form = TokenEditForm(request.POST, instance=token)
         if form.is_valid():
+            token.last_edit = timezone.now()
             form.save()
             messages.add_message(request, messages.SUCCESS, "Token updated.")
             return HttpResponseRedirect(reverse("nfctokens_mytokens"))
@@ -101,14 +102,18 @@ def mytokens_edit(request, uid):
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 def mytokens_claim(request):
+    current_count = request.user.nfctokens.count()
+    if current_count >= settings.NFCTOKENS_USER_TOTAL_LIMIT:
+        messages.add_message(request, messages.ERROR, "Too many tokens.")
+        return HttpResponseRedirect(reverse("nfctokens_mytokens"))
     context = {"tokens": NFCToken.recent_objects.all()}
     return render(request, "nfctokens/mytokens_claim.html", context)
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 def mytokens_delete(request, uid):
     token = request.user.nfctokens.get(uid=uid)
     if request.method == "POST":
@@ -122,29 +127,37 @@ def mytokens_delete(request, uid):
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 @require_POST
 def mytokens_enable(request, uid):
-    token = request.user.nfctokens.get(uid=uid)
-    token.enabled = True
-    token.save()
-    messages.add_message(request, messages.SUCCESS, "Token %s enabled." % (token.uid))
+    current_enabled_count = request.user.nfctokens.filter(enabled=True).count()
+    if current_enabled_count < settings.NFCTOKENS_USER_ENABLED_LIMIT:
+        token = request.user.nfctokens.get(uid=uid)
+        token.enabled = True
+        token.last_edit = timezone.now()
+        token.save()
+        messages.add_message(
+            request, messages.SUCCESS, "Token %s enabled." % (token.uid)
+        )
+    else:
+        messages.add_message(request, messages.ERROR, "Too many enabled tokens.")
     return HttpResponseRedirect(reverse("nfctokens_mytokens"))
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_configure_token", raise_exception=True)
 @require_POST
 def mytokens_disable(request, uid):
     token = request.user.nfctokens.get(uid=uid)
     token.enabled = False
+    token.last_edit = timezone.now()
     token.save()
     messages.add_message(request, messages.SUCCESS, "Token %s disabled." % (token.uid))
     return HttpResponseRedirect(reverse("nfctokens_mytokens"))
 
 
 @login_required
-@user_passes_test(can_configure_tokens)
+@permission_required("nfctokens.self_view_tokenlog", raise_exception=True)
 def mytokenlogs(request):
     context = {
         "tokens": request.user.nfctokenlogs.all().order_by("-timestamp"),
@@ -243,11 +256,12 @@ def nfc_token_auth(request):
                     }
                 )
 
+    user_groups = get_groups(token.user)
     matched_groups = []
     if required_groups:
         print(required_groups)
         found = False
-        for group in get_groups(token.user):
+        for group in user_groups:
             if group in required_groups:
                 matched_groups.append(group)
                 found = True
@@ -265,8 +279,7 @@ def nfc_token_auth(request):
         "found": True,
         "authorized": True,
         "username": token.user.username,
+        "groups": user_groups,
     }
-    if len(matched_groups) > 0:
-        reply["groups"] = matched_groups
     token_sighting(token, location, True, type_="auth")
     return JsonResponse(reply)
