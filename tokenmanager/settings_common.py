@@ -51,6 +51,7 @@ MIDDLEWARE = [
     "apikeys.middleware.APIKeyMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "tokenmanager.urls"
