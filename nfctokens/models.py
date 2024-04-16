@@ -43,6 +43,24 @@ class NFCToken(models.Model):
                 message="This is a randomly-generated UID which cannot be used for authentication",
                 inverse_match=True,
             ),
+            # Invalid due to cascading rules (byte 0 of a 4-byte UID cannot be 0x88)
+            RegexValidator(
+                regex=r"^\s*88[0-9a-fA-F]{6}\s*$",
+                message="This is an invalid UID (contains a cascade tag)",
+                inverse_match=True,
+            ),
+            # Invalid due to cascading rules (byte 3 of a 7-byte UID cannot be 0x88)
+            RegexValidator(
+                regex=r"^\s*[0-9a-fA-F]{6}88[0-9a-fA-F]{6}\s*$",
+                message="This is an invalid UID (contains a cascade tag)",
+                inverse_match=True,
+            ),
+            # Invalid due to cascading rules (byte 3 of a 10-byte UID cannot be 0x88)
+            RegexValidator(
+                regex=r"^\s*[0-9a-fA-F]{6}88[0-9a-fA-F]{12}\s*$",
+                message="This is an invalid UID (contains a cascade tag)",
+                inverse_match=True,
+            ),
         ],
     )
     description = models.CharField(max_length=255, blank=True)
