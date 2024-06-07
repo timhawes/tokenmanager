@@ -1,8 +1,9 @@
-# SPDX-FileCopyrightText: 2022 Tim Hawes <me@timhawes.com>
+# SPDX-FileCopyrightText: 2022-2024 Tim Hawes <me@timhawes.com>
 #
 # SPDX-License-Identifier: MIT
 
 import random
+import uuid
 
 from django.contrib.auth.models import AnonymousUser, Permission
 from django.db import models
@@ -17,6 +18,7 @@ def generate_key():
 
 
 class APIKey(models.Model):
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     key = models.CharField(
         max_length=128,
         unique=True,
@@ -33,13 +35,16 @@ class APIKey(models.Model):
     class Meta:
         verbose_name = "API key"
 
+    def __str__(self):
+        return str(self.uuid)
+
 
 class APIUser(AnonymousUser):
     _apikey = None
     _permissions = set()
 
     def __str__(self):
-        return f"APIUser #{self._apikey.id}"
+        return f"APIUser #{self._apikey.uuid}"
 
     def __init__(self, apikey):
         self._apikey = apikey
