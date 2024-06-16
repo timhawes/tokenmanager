@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 Tim Hawes <me@timhawes.com>
+# SPDX-FileCopyrightText: 2022-2024 Tim Hawes <me@timhawes.com>
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -6,13 +6,10 @@ FROM python:3.12
 
 WORKDIR /usr/src/app
 
-COPY Pipfile Pipfile.lock ./
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends pipenv \
-    && rm -r /var/lib/apt/lists/* \
-    && pipenv install --deploy --system
+COPY requirements.txt .
+RUN pip install --require-hashes -r requirements.txt
 
-COPY . ./
+COPY . .
 
 ENV DJANGO_SETTINGS_MODULE=tokenmanager.settings_docker
 
