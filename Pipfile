@@ -8,6 +8,7 @@ django = "==5.*"
 django-allauth = {extras = ["socialaccount"], version = "*"}
 django-bootstrap5 = "*"
 django-extensions = "*"
+gunicorn = "*"
 
 [dev-packages]
 

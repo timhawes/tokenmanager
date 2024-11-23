@@ -22,4 +22,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 8000
 VOLUME [ "/data/config", "/data/database", "/data/static" ]
-CMD ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

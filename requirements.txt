@@ -8,8 +8,10 @@ django==5.1.3; python_version >= '3.10' --hash=sha256:8b38a9a12da3ae00cb0ba72da9
 django-allauth[socialaccount]==65.2.0; python_version >= '3.8' --hash=sha256:0a3d7baf7beefd6fe8027316302c26ece7433cf4331a3b245d15fc9a7be68b6f
 django-bootstrap5==24.3; python_version >= '3.8' --hash=sha256:98f7916f9f7f9c34dfe157f7c062a28ebf6d17ff95307bef260ba794ba34e2a0 --hash=sha256:ca5ec5568fc2a3fc239f0cb8ce41a7df3802b8c4af930d7f64451784ec7ddc16
 django-extensions==3.2.3; python_version >= '3.6' --hash=sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a --hash=sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401
+gunicorn==23.0.0; python_version >= '3.7' --hash=sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d --hash=sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec
 idna==3.10; python_version >= '3.6' --hash=sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9 --hash=sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
 oauthlib==3.2.2; python_version >= '3.6' --hash=sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca --hash=sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918
+packaging==24.2; python_version >= '3.8' --hash=sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759 --hash=sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f
 pycparser==2.22; python_version >= '3.8' --hash=sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6 --hash=sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 pyjwt[crypto]==2.10.0 --hash=sha256:543b77207db656de204372350926bed5a86201c4cbff159f623f79c7bb487a15 --hash=sha256:7628a7eb7938959ac1b26e819a1df0fd3259505627b575e4bad6d08f76db695c
 requests==2.32.3 --hash=sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760 --hash=sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6
