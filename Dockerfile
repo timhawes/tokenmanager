@@ -20,6 +20,8 @@ RUN rm -f db.sqlite3 local_settings.py settings_local.py \
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+ARG GIT_COMMIT
+
 EXPOSE 8000
 VOLUME [ "/data/config", "/data/database", "/data/static" ]
 ENTRYPOINT ["/docker-entrypoint.sh"]
