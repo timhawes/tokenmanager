@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2022-2024 Tim Hawes <me@timhawes.com>
+# SPDX-FileCopyrightText: 2022-2025 Tim Hawes <me@timhawes.com>
 #
 # SPDX-License-Identifier: CC0-1.0
 
-FROM python:3.13
+FROM python:3.13-alpine
 
 WORKDIR /usr/src/app
 
@@ -14,7 +14,8 @@ COPY . .
 ENV DJANGO_SETTINGS_MODULE=tokenmanager.settings_docker
 
 RUN rm -f db.sqlite3 local_settings.py settings_local.py \
-    && useradd django \
+    && apk add runuser \
+    && adduser -D django \
     && python manage.py check \
     && python manage.py makemigrations
 
