@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c8a134ca7f0e2969518419fb361075cba7b3b3e3bc9c76c9d99802fe29ec224c"
+            "sha256": "c1122c72f3e311a9e9a2f57abb01b1ada9940ca3fdb265675cfcd724de6c4b4d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -257,6 +257,7 @@
         },
         "django-allauth": {
             "extras": [
+                "mfa",
                 "socialaccount"
             ],
             "hashes": [
@@ -282,6 +283,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.9'",
             "version": "==4.1"
+        },
+        "fido2": {
+            "hashes": [
+                "sha256:3061cd05e73b3a0ef6afc3b803d57c826aa2d6a9732d16abd7277361f58e7964",
+                "sha256:685f54a50a57e019c6156e2dd699802a603e3abf70bab334f26affdd4fb8d4f7"
+            ],
+            "markers": "python_version >= '3.10' and python_version < '4'",
+            "version": "==2.0.0"
         },
         "gunicorn": {
             "hashes": [
@@ -334,6 +343,14 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==2.10.1"
+        },
+        "qrcode": {
+            "hashes": [
+                "sha256:16e64e0716c14960108e85d853062c9e8bba5ca8252c0b4d0231b9df4060ff4f",
+                "sha256:35c3f2a4172b33136ab9f6b3ef1c00260dd2f66f858f24d88418a015f446506c"
+            ],
+            "markers": "python_version >= '3.9' and python_version < '4.0'",
+            "version": "==8.2"
         },
         "requests": {
             "hashes": [

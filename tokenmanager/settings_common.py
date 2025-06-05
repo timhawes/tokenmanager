@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "allauth.socialaccount",
     "django_bootstrap5",
     "django_extensions",
