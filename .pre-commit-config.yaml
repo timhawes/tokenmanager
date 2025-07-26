@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 Tim Hawes <me@timhawes.com>
+# SPDX-FileCopyrightText: 2022-2025 Tim Hawes <me@timhawes.com>
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -18,3 +18,7 @@ repos:
   rev: v3.19.0
   hooks:
   - id: pyupgrade
+- repo: https://github.com/astral-sh/uv-pre-commit
+  rev: 0.8.3
+  hooks:
+    - id: uv-export
