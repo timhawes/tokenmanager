@@ -7,7 +7,7 @@ FROM python:3.13-alpine
 WORKDIR /usr/src/app
 
 COPY requirements.txt .
-RUN pip install --require-hashes -r requirements.txt
+RUN pip install --break-system-packages --require-hashes -r requirements.txt
 
 COPY . .
 
