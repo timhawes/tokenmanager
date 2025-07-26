@@ -11,11 +11,11 @@ repos:
   - id: check-added-large-files
   - id: check-ast
 - repo: https://github.com/psf/black
-  rev: 24.10.0
+  rev: 25.1.0
   hooks:
   - id: black
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.19.0
+  rev: v3.20.0
   hooks:
   - id: pyupgrade
 - repo: https://github.com/astral-sh/uv-pre-commit
