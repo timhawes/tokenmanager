@@ -3,13 +3,12 @@
 # SPDX-License-Identifier: CC0-1.0
 
 FROM python:3.13-alpine
+COPY --from=ghcr.io/astral-sh/uv:0.8.3 /uv /uvx /bin/
 
-WORKDIR /usr/src/app
-
-COPY requirements.txt .
-RUN pip install --break-system-packages --require-hashes -r requirements.txt
-
-COPY . .
+COPY . /app
+WORKDIR /app
+RUN uv sync --locked
+ENV PATH="/app/.venv/bin:$PATH"
 
 ENV DJANGO_SETTINGS_MODULE=tokenmanager.settings_docker
 
