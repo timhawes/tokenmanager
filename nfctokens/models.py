@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022-2024 Tim Hawes <me@timhawes.com>
+# SPDX-FileCopyrightText: 2022-2026 Tim Hawes <me@timhawes.com>
 #
 # SPDX-License-Identifier: MIT
 
@@ -8,6 +8,12 @@ from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
+
+
+def normalize_uid(value):
+    if value is None:
+        return value
+    return value.strip().lower()
 
 
 class UnassignedTokenManager(models.Manager):
@@ -96,8 +102,7 @@ class NFCToken(models.Model):
         return self.uid
 
     def clean(self):
-        if self.uid is not None:
-            self.uid = self.uid.strip().lower()
+        self.uid = normalize_uid(self.uid)
 
 
 class NFCTokenLog(models.Model):
