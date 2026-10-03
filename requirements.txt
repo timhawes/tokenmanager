@@ -226,9 +226,9 @@ django==6.0.8 \
     #   django-bootstrap5
     #   django-extensions
     #   tokenmanager
-django-allauth==65.19.6 \
-    --hash=sha256:52f6d31998c0101775b2b5d4fb627a18f3e13c79d863740f762ca476e720be9f \
-    --hash=sha256:efa94dbb9bccf7f29ab7034d176f6a7ab17014c9434867cc7bceea434623ab06
+django-allauth==65.19.7 \
+    --hash=sha256:8899377f38afabf10445c9ee2f808a730304ca8aecc540657d51a8b3928283d6 \
+    --hash=sha256:c7749551b659ca954e483f6f634cd0c262d65dd8144f5219b3a31cba0426e981
     # via tokenmanager
 django-bootstrap5==26.3 \
     --hash=sha256:340df3a8ff841e591e7e86d41e49412a19d8af7eb1a5df0cfb8ebfa7c4b5ed8d \
